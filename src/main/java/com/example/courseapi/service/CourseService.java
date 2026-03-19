@@ -1,60 +1,52 @@
 package com.example.courseapi.service;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.courseapi.model.Course;
+import com.example.courseapi.repository.CourseRepository;
 
 @Service
 public class CourseService {
 
-    private List<Course> courseList = new ArrayList<>();
+    @Autowired
+    private CourseRepository repo;
 
-    // Add course
-    public Course addCourse(Course course) {
-        courseList.add(course);
-        return course;
+    // Add
+    public Course addCourse(Course c) {
+        return repo.save(c);
     }
 
-    // Get all courses
+    // Get All
     public List<Course> getAllCourses() {
-        return courseList;
+        return repo.findAll();
     }
 
-    // Get course by id
+    // Get by ID
     public Course getCourseById(int id) {
-        return courseList.stream()
-                .filter(c -> c.getCourseId() == id)
-                .findFirst()
-                .orElse(null);
+        return repo.findById(id).orElse(null);
     }
 
-    // Update course
-    public Course updateCourse(int id, Course course) {
-        for (Course c : courseList) {
-            if (c.getCourseId() == id) {
-                c.setTitle(course.getTitle());
-                c.setDuration(course.getDuration());
-                c.setFee(course.getFee());
-                return c;
-            }
+    // Delete
+    public String deleteCourse(int id) {
+        repo.deleteById(id);
+        return "Deleted Successfully";
+    }
+
+    // Update
+    public Course updateCourse(int id, Course newCourse) {
+
+        Course old = repo.findById(id).orElse(null);
+
+        if (old != null) {
+            old.setTitle(newCourse.getTitle());
+            old.setDuration(newCourse.getDuration());
+            old.setFee(newCourse.getFee());
+            return repo.save(old);
         }
+
         return null;
-    }
-
-    // Delete course
-    public boolean deleteCourse(int id) {
-        return courseList.removeIf(c -> c.getCourseId() == id);
-    }
-
-    // Search by title
-    public List<Course> searchByTitle(String title) {
-        List<Course> result = new ArrayList<>();
-        for (Course c : courseList) {
-            if (c.getTitle().equalsIgnoreCase(title)) {
-                result.add(c);
-            }
-        }
-        return result;
     }
 }

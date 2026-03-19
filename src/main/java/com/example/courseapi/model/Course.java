@@ -1,27 +1,26 @@
 package com.example.courseapi.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Course {
 
-    private int courseId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int course_id;
+
     private String title;
     private String duration;
     private double fee;
 
-    public Course() {}
+    // getters & setters
 
-    public Course(int courseId, String title, String duration, double fee) {
-        this.courseId = courseId;
-        this.title = title;
-        this.duration = duration;
-        this.fee = fee;
+    public int getCourse_id() {
+        return course_id;
     }
 
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
     }
 
     public String getTitle() {

@@ -15,22 +15,22 @@ import com.example.courseapi.service.CourseService;
 public class CourseController {
 
     @Autowired
-    CourseService service;
+    private CourseService service;
 
-    // Add course
+    // ✅ Add course
     @PostMapping
-    public ResponseEntity<?> addCourse(@RequestBody Course course) {
+    public ResponseEntity<String> addCourse(@RequestBody Course course) {
         service.addCourse(course);
         return new ResponseEntity<>("Course Added Successfully", HttpStatus.CREATED);
     }
 
-    // Get all courses
+    // ✅ Get all courses
     @GetMapping
     public ResponseEntity<List<Course>> getCourses() {
         return new ResponseEntity<>(service.getAllCourses(), HttpStatus.OK);
     }
 
-    // Get by id
+    // ✅ Get by id
     @GetMapping("/{id}")
     public ResponseEntity<?> getCourse(@PathVariable int id) {
         Course c = service.getCourseById(id);
@@ -42,9 +42,9 @@ public class CourseController {
         return new ResponseEntity<>(c, HttpStatus.OK);
     }
 
-    // Update
+    // ✅ Update
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCourse(@PathVariable int id, @RequestBody Course course) {
+    public ResponseEntity<String> updateCourse(@PathVariable int id, @RequestBody Course course) {
 
         Course updated = service.updateCourse(id, course);
 
@@ -55,9 +55,9 @@ public class CourseController {
         return new ResponseEntity<>("Course Updated Successfully", HttpStatus.OK);
     }
 
-    // Delete
+    // ✅ Delete (FIXED BOOLEAN ISSUE)
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCourse(@PathVariable int id) {
+    public ResponseEntity<String> deleteCourse(@PathVariable int id) {
 
         boolean deleted = service.deleteCourse(id);
 
@@ -68,7 +68,7 @@ public class CourseController {
         return new ResponseEntity<>("Course Deleted Successfully", HttpStatus.OK);
     }
 
-    // Search by title
+    // ✅ Search by title
     @GetMapping("/search/{title}")
     public ResponseEntity<List<Course>> searchCourse(@PathVariable String title) {
         return new ResponseEntity<>(service.searchByTitle(title), HttpStatus.OK);
