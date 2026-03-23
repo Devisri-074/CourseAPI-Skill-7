@@ -29,10 +29,14 @@ public class CourseService {
         return repo.findById(id).orElse(null);
     }
 
-    // Delete
-    public String deleteCourse(int id) {
-        repo.deleteById(id);
-        return "Deleted Successfully";
+    // Delete (FIXED ✔)
+    public boolean deleteCourse(int id) {
+        if (repo.existsById(id)) {
+            repo.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Update
@@ -48,5 +52,10 @@ public class CourseService {
         }
 
         return null;
+    }
+
+    // Search (FIXED ✔)
+    public List<Course> searchByTitle(String title) {
+        return repo.findByTitleContainingIgnoreCase(title);
     }
 }

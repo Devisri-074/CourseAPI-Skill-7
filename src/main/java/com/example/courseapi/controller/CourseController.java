@@ -3,8 +3,7 @@ package com.example.courseapi.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.courseapi.model.Course;
@@ -17,22 +16,23 @@ public class CourseController {
     @Autowired
     private CourseService service;
 
-    // ✅ Add course
+    // Add
     @PostMapping
     public ResponseEntity<String> addCourse(@RequestBody Course course) {
         service.addCourse(course);
         return new ResponseEntity<>("Course Added Successfully", HttpStatus.CREATED);
     }
 
-    // ✅ Get all courses
+    // Get All
     @GetMapping
     public ResponseEntity<List<Course>> getCourses() {
         return new ResponseEntity<>(service.getAllCourses(), HttpStatus.OK);
     }
 
-    // ✅ Get by id
+    // Get by ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getCourse(@PathVariable int id) {
+
         Course c = service.getCourseById(id);
 
         if (c == null) {
@@ -42,7 +42,7 @@ public class CourseController {
         return new ResponseEntity<>(c, HttpStatus.OK);
     }
 
-    // ✅ Update
+    // Update
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCourse(@PathVariable int id, @RequestBody Course course) {
 
@@ -55,7 +55,7 @@ public class CourseController {
         return new ResponseEntity<>("Course Updated Successfully", HttpStatus.OK);
     }
 
-    // ✅ Delete (FIXED BOOLEAN ISSUE)
+    // Delete (FIXED ✔)
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable int id) {
 
@@ -68,9 +68,16 @@ public class CourseController {
         return new ResponseEntity<>("Course Deleted Successfully", HttpStatus.OK);
     }
 
-    // ✅ Search by title
+    // Search
     @GetMapping("/search/{title}")
     public ResponseEntity<List<Course>> searchCourse(@PathVariable String title) {
-        return new ResponseEntity<>(service.searchByTitle(title), HttpStatus.OK);
+
+        List<Course> list = service.searchByTitle(title);
+
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
